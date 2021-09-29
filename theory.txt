@@ -1,0 +1,70 @@
+Let our best fit line be 
+Y=b1x+b0
+In linear regression: we use cost function as residual sum of squares
+For minimizing that we use partial derivatives to minimize RSS(cost function):
+D(f,m)=0 and D(f,c)=0 and D2(f,m)*D2(f,c)-(D(D(f,m),c))^2 > 0 and iff D2(f,m)>0 and D2(f,c)>0
+we can get m and c by using above
+m=sigma((xi-xmean)(y-ymean))/sigma((xi-xmean)^2)
+c=ymean-m*xmean
+
+Now for multiple features:
+Y=sigma(bixi)+b0
+We can take out gradient over all features
+grad(cost_function) is matrix of (n+1) X 1
+
+Now for minimizing the above expression we should use gradient descent.
+m=m-step*slope_m
+b=b-step*slope_b
+where slope are cost_function derivatives
+Imagine a mountain and we need to reach a minimum then for that we should begin with larger steps  to reduce computations,
+but to and extent else we could overshoot and reach other side of minimum leading to no minima situation. 
+Hence slowly we reduce our step size (proportional to our negative gradient.) also to avoid the overshoot.
+Joint Plot scatterplot and pairplot were used
+Evaluating Model(model=LinearRegression() model.fit(x_train,y_train) model.predict(x_test)):
+plotting scatterplot b/w predicted and true values
+RMS error and we can also calculate coefficients above by model.coef
+Residual error should normally distributed(x axis=residues, y axis=frequency of residues) by using sns.distplot(y_test-y_pred)
+
+Correlation in LinearRegression=(sigma(x-xmean)*(y-mean))/sqrt((sigma(x-xmean)^2*(y-ymean)^2))
+x is independent and y is dependent.
+
+In Overfitting high variance(focus only on training data)
+Underfitting:Hign bias(very less dependence on training data)
+
+Normalization: (X-Xmin)/(Xmax-Xmin)
+Standardization:(X-mean)/deviation
+
+Missing data:
+1>Drop if >60% data is Missing[Sometimes more info is lost]
+2>replace with mean,median,mode[when data is less good]
+3>prediction or KNN
+
+LogisticRegression:
+ X=sigma(bixi)+b0
+y_pred=sigmoid(X)
+cost function:-1/n*sigma(y_true*log(y_pred)+(1-y_true)*log(1-log(y_pred)))[cannot use LinearRegression cost_function because of it's non-convex nature]
+
+accuracy=(TP+TN)/total
+Recall=TP/total actual positive
+precision=TP/total predicted positive
+f1-score=harmonic_mean(precision,recall)
+
+KNN:
+
+Sort the distances with their clusters from the upcoming new data point
+and select n_neighbors to some value and check which is in majority in the first n_neighbors distances
+Scaler=StandardScaler()
+Scaler.transform(x)
+error rate=1-accuracy
+plot for some values of k and check which fits the best
+
+2nd method for optimal k
+PIPELINE
+scaler=StandardScaler()
+knn=KNeighborsClassifier()
+operations=[('scaler',scaler),('knn',knn)] scaling to occur to knn
+pipe=Pipeline(operations)
+
+Apply GridSearchCV
+param_grid={'knn__n_neighbors'}#first is model then parameter
+clasas=GridSearchCV(pipe,param_grid,cv=5,scoring='accuracy')#cv is number of folds or resampling
